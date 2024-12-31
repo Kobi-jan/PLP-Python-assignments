@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e202a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        header {
+            width: 100%;
+            background-color: #282c35;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        .navbar a:hover {
+            color: rgb(39, 117, 161);
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .navbar-tech {
+            font-size: 1.1rem;
+            color: #a0b0c0;
+        }
+        .navbar-tech:hover {
+            color: #4CAF50;
+        }
+        form {
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            background: #272a33;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .left-panel {
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(29, 141, 252, 0.8), rgba(0, 64, 128, 0.8));
+            background-size: cover;
+            background-position: center;
+            width: 300px;
+            color: white;
+        }
+        .left-panel h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .left-panel p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+        .left-panel .temperature {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .right-panel {
+            padding: 20px;
+            width: 300px;
+        }
+        .right-panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .details p {
+            margin: 5px 0;
+        }
+        .forecast {
+            display: flex;
+            justify-content: space-between;
+        }
+        .forecast-day {
+            text-align: center;
+        }
+        .forecast-day img {
+            width: 40px;
+        }
+        button {
+            padding: 10px 15px;
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #27672a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-brand">
+                Weather App
+            </div>
+            <a href="https://openweathermap.org" class="navbar-tech">OpenWeather - Get Your API</a>
+        </div>
+    </header>
+
+    <form method="POST" action="/">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div class="container">
+        {% if temp %}
+        <div class="left-panel">
+            <h1>{{ main }}</h1>
+            <p>{{ description }}</p>
+            <div class="temperature">{{ temp }}</div>
+            <p>Coordinates: {{ coordinate }}</p>
+            <p>Country: {{ country_code }}</p>
+        </div>
+        <div class="right-panel">
+            <h2>Weather Details</h2>
+            <div class="details">
+                <p>Pressure: {{ pressure }} hPa</p>
+                <p>Humidity: {{ humidity }}%</p>
+            </div>
+            <div class="forecast">
+                <div class="forecast-day">
+                    <p>Today</p>
+                    <img src="http://openweathermap.org/img/wn/{{ icon }}@2x.png" alt="Weather Icon">
+                    <p>{{ temp }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="container">
+            <p>No weather data available. Please enter a city.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
